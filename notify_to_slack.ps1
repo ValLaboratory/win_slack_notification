@@ -57,15 +57,6 @@ process
 
   SendSlack -text $text -sender $sender
 
-  # $notificationPayload = @{
-  #     text = $text;
-  #     username = $sender; 
-  #     #icon_url = "https://";
-  # }
-
-  # $bytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $notificationPayload))
-  # Invoke-RestMethod -Uri $config.slack_incoming_webhook_url.Value -Method Post -Body $bytes
-
   # gasco: あんどん を使って電光掲示板にメッセージを流す
   if($andon)
   {
@@ -77,9 +68,6 @@ process
     $andon_text += $message
 
     SendSlack -text $andon_text -sender $sender
-    # $notificationPayload.text = $andon_text
-    # $bytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $notificationPayload))
-    # Invoke-RestMethod -Uri $config.slack_incoming_webhook_url.Value -Method Post -Body $bytes
   }
 }
 
