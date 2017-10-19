@@ -2,7 +2,7 @@ Param(
   [string] $message,
   [string] $mention,
   [string] $sender="WinSlackNotification",
-  [switch] $an_don,
+  [switch] $andon,
   [switch] $emergency
 )
 
@@ -38,7 +38,18 @@ $notificationPayload = @{
 $bytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $notificationPayload))
 Invoke-RestMethod -Uri $config.slack_incoming_webhook_url.Value -Method Post -Body $bytes
 
-# an_don
-
+# gasco: あんどん を使って電光掲示板にメッセージを流す
+if($andon)
+{
+  $andon_text = "gasco: andon"
+  if($emergency) {
+    $andon_text += " 緊急"
+  }  
+  $andon_text += " "
+  $andon_text += $message
+  $notificationPayload.text = $andon_text
+  $bytes = [System.Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $notificationPayload))
+  Invoke-RestMethod -Uri $config.slack_incoming_webhook_url.Value -Method Post -Body $bytes
+}
 
 exit $rc
